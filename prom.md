@@ -328,13 +328,8 @@ To integrate Alertmanager with Slack for sending alerts, follow these steps:
    - Click on your name to open the menu.
    - Select `Tools and Settings`.
    - Click on `Manage Apps`.
-   - ![Screenshot 1](Screenshot%20from%202024-08-14%2015-17-16.png)
-![Screenshot 2](Screenshot%20from%202024-08-14%2015-20-04.png)
-![Screenshot 3](Screenshot%20from%202024-08-14%2015-20-20.png)
-![Screenshot 4](Screenshot%20from%202024-08-14%2015-21-13.png)
-![Screenshot 5](Screenshot%20from%202024-08-14%2015-22-10.png)
-![Screenshot 6](Screenshot%20from%202024-08-14%2015-23-56.png)
-
+   - 
+![Screenshot 1](Screenshot%20from%202024-08-14%2015-17-16.png)
      
 
 3. **Add Incoming Webhooks**
