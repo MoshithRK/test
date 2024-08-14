@@ -209,13 +209,139 @@ scrape_configs:
       - targets: ['192.168.1.181:9100']
 ```
 
-## 5. **Troubleshooting**
+## 5. **Creating Alert Rules**
 
-- **Node Exporter Not Accessible**: Ensure Node Exporter is running and reachable. Check the network connection and firewall settings.
-- **Prometheus Errors**: Review Prometheus logs for errors and ensure that the configuration file is correctly formatted.
+Prometheus uses rule files to define alerts. Below are the rule files used in this setup.
 
-## Conclusion
+### **Critical Alerts (`/etc/prometheus/linux.yml`)**
 
-You now have Prometheus, Node Exporter, and Alertmanager set up and running. Customize your configurations as needed, and start monitoring your systems effectively.
+```yaml
+groups:
+  - name: critical-alerts
+    rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 2m
+        labels:
+          severity: critical
+          category: instance
+        annotations:
+          summary: "Instance Down"
+          description: "An instance is down and not responding."
 
----
+      - alert: RootDiskAlert
+        expr: (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) < 0.1
+        for: 2m
+        labels:
+          severity: critical
+          category: disk
+        annotations:
+          summary: "Low Root Disk Space"
+          description: "Root disk space is below 10%."
+
+      - alert: TcpListeningPortAlert
+        expr: sum by (instance) (node_netstat_Tcp_Tw) > 0
+        for: 2m
+        labels:
+          severity: critical
+          category: network
+        annotations:
+          summary: "TCP Listening Port Issue"
+          description: "There are issues with TCP listening ports."
+
+      - alert: TcpEstablishedPortAlert
+        expr: sum by (instance) (node_netstat_Tcp_ActiveOpens) < 1
+        for: 2m
+        labels:
+          severity: critical
+          category: network
+        annotations:
+          summary: "TCP Established Port Issue"
+          description: "No active TCP connections established."
+
+      - alert: MemoryAlert
+        expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes < 0.1
+        for: 2m
+        labels:
+          severity: critical
+          category: memory
+        annotations:
+          summary: "Low Available Memory"
+          description: "Available memory is below 10%."
+
+      - alert: HighCpuUsageAlert
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[1m])) * 100) > 90
+        for: 2m
+        labels:
+          severity: critical
+          category: cpu
+        annotations:
+          summary: "High CPU Usage"
+          description: "CPU usage
+
+ exceeds 90%."
+```
+
+### **Warning Alerts (`/etc/prometheus/linux1.yml`)**
+
+```yaml
+groups:
+  - name: warning-alerts
+    rules:
+      - alert: NetworkConnectionWarning
+        expr: node_netstat_Tcp_RetransSegs > 100
+        for: 2m
+        labels:
+          severity: warning
+          category: network
+        annotations:
+          summary: "Network Connectivity Issues"
+          description: "TCP retransmissions exceeded 100. Investigate potential network issues."
+
+      - alert: ProcessCountWarning
+        expr: count(node_procs_running) > 500
+        for: 2m
+        labels:
+          severity: warning
+          category: system
+        annotations:
+          summary: "High Process Count"
+          description: "Running processes exceeded 500. Consider optimizing applications or increasing resources."
+
+      - alert: SystemLoadWarning
+        expr: node_load5 > 10
+        for: 2m
+        labels:
+          severity: warning
+          category: system
+        annotations:
+          summary: "System Load High"
+          description: "5-minute load average exceeds 10. Investigate potential causes."
+
+      - alert: SwapUsageWarning
+        expr: node_memory_SwapUsed > 1 * 1024 * 1024 * 1024
+        for: 2m
+        labels:
+          severity: warning
+          category: memory
+        annotations:
+          summary: "High Swap Usage"
+          description: "Swap usage exceeds 1GB. Consider increasing RAM or optimizing applications."
+```
+
+### **Info Alerts (`/etc/prometheus/linux2.yml`)**
+
+```yaml
+groups:
+  - name: info-alerts
+    rules:
+      - alert: UserLoginAlert
+        expr: increase(node_boot_time_seconds[5m]) > 0
+        for: 2m
+        labels:
+          severity: info
+          category: security
+        annotations:
+          summary: "User Login Detected"
+          description: "A user has logged in via SSH."
+```
