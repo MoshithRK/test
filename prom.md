@@ -314,6 +314,108 @@ groups:
 ```
 
 
+---
+
+## 5. **Integration with Slack**
+
+To integrate Alertmanager with Slack for sending alerts, follow these steps:
+
+1. **Open Slack in your Web Browser**
+   - Open your Slack workspace in a web browser.
+
+2. **Access App Management**
+   - Go to the top left corner of Slack.
+   - Click on your name to open the menu.
+   - Select `Tools and Settings`.
+   - Click on `Manage Apps`.
+
+3. **Add Incoming Webhooks**
+   - In the Slack App Directory, type "Incoming Webhooks" into the search bar.
+   - Select "Incoming Webhooks" from the search results.
+   - Click `Add to Slack`.
+
+4. **Configure Incoming Webhook**
+   - Choose the Slack channel where you want the alerts to be sent.
+   - Click `Add Incoming Webhook Integration`.
+   - A Webhook URL will be generated for you.
+
+5. **Copy the Webhook URL**
+   - Copy the generated Webhook URL. You will need this URL to configure Alertmanager.
+
+6. **Update Alertmanager Configuration**
+   - Paste the copied Webhook URL into the `alertmanager.yml` file under the `receivers` section.
+
+7. **Save Changes**
+   - Save the changes to `alertmanager.yml` and exit the editor.
+
+### **Alertmanager Configuration (`/etc/alertmanager/alertmanager.yml`)**
+
+```yaml
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: 'critical-slack'
+  routes:
+    - match:
+        severity: critical
+      receiver: 'critical-slack'
+      group_wait: 10s
+      group_interval: 10s
+      repeat_interval: 1h
+
+    - match:
+        severity: warning
+      receiver: 'warning-slack'
+      group_wait: 10s
+      group_interval: 10s
+      repeat_interval: 30m
+
+    - match:
+        severity: info
+      receiver: 'info-slack'
+      group_wait: 10s
+      group_interval: 10s
+      repeat_interval: 1h
+
+receivers:
+  - name: 'critical-slack'
+    slack_configs:
+      - api_url: 'https://hooks.slack.com/services/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'
+        channel: '#critical-slack'
+        username: 'alertmanager'
+        icon_emoji: ':warning:'
+        text: '{{ range .Alerts }}{{ .Annotations.summary }}\n{{ .Annotations.description }}\n<{{ .GeneratorURL }}|View in Prometheus>{{ end }}'
+        send_resolved: true
+
+  - name: 'warning-slack'
+    slack_configs:
+      - api_url: 'https://hooks.slack.com/services/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'
+        channel: '#warning-info-slack'
+        username: 'alertmanager'
+        icon_emoji: ':warning:'
+        text: '{{ range .Alerts }}{{ .Annotations.summary }}\n{{ .Annotations.description }}\n<{{ .GeneratorURL }}|View in Prometheus>{{ end }}'
+        send_resolved: true
+
+  - name: 'info-slack'
+    slack_configs:
+      - api_url: 'https://hooks.slack.com/services/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'
+        channel: '#info-slack'
+        username: 'alertmanager'
+        icon_emoji: ':information_source:'
+        text: '{{ range .Alerts }}{{ .Annotations.summary }}\n{{ .Annotations.description }}\n<{{ .GeneratorURL }}|View in Prometheus>{{ end }}'
+        send_resolved: true
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'instance']
+```
+
+---
+
 
 ## 5. **Configuring Prometheus**
 
