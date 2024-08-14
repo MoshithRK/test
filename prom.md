@@ -176,40 +176,7 @@ This guide covers setting up Prometheus along with Node Exporter and Alertmanage
    sudo systemctl enable alertmanager
    ```
 
-## 4. **Configuring Prometheus**
-
-Edit the Prometheus configuration file `/etc/prometheus/prometheus.yml` to include your Node Exporter and Alertmanager targets:
-
-```yaml
-global:
-  scrape_interval: 15s
-  evaluation_interval: 15s
-
-alerting:
-  alertmanagers:
-  - static_configs:
-    - targets: ['localhost:9093']
-
-rule_files:
-  - /etc/prometheus/linux.yml
-  - /etc/prometheus/linux1.yml
-  - /etc/prometheus/linux2.yml
-
-scrape_configs:
-  - job_name: 'prometheus'
-    static_configs:
-      - targets: ['localhost:9090']
-
-  - job_name: 'local_node_exporter'
-    static_configs:
-      - targets: ['localhost:9100']
-
-  - job_name: 'remote_node_exporter'
-    static_configs:
-      - targets: ['192.168.1.181:9100']
-```
-
-## 5. **Creating Alert Rules**
+## 4. **Creating Alert Rules**
 
 Prometheus uses rule files to define alerts. Below are the rule files used in this setup.
 
@@ -345,3 +312,39 @@ groups:
           summary: "User Login Detected"
           description: "A user has logged in via SSH."
 ```
+
+
+
+## 5. **Configuring Prometheus**
+
+Edit the Prometheus configuration file `/etc/prometheus/prometheus.yml` to include your Node Exporter and Alertmanager targets:
+
+```yaml
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: ['localhost:9093']
+
+rule_files:
+  - /etc/prometheus/linux.yml
+  - /etc/prometheus/linux1.yml
+  - /etc/prometheus/linux2.yml
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'local_node_exporter'
+    static_configs:
+      - targets: ['localhost:9100']
+
+  - job_name: 'remote_node_exporter'
+    static_configs:
+      - targets: ['192.168.1.181:9100']
+```
+
