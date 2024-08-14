@@ -351,11 +351,17 @@ To integrate Alertmanager with Slack for sending alerts, follow these steps:
 5. **Copy the Webhook URL**
    - Copy the generated Webhook URL. You will need this URL to configure Alertmanager.
 
+
+![Screenshot 5](Screenshot%20from%202024-08-14%2015-22-10.png)
+
+
 6. **Update Alertmanager Configuration**
    - Paste the copied Webhook URL into the `alertmanager.yml` file under the `receivers` section.
 
 7. **Save Changes**
    - Save the changes to `alertmanager.yml` and exit the editor.
+
+![Screenshot 6](Screenshot%20from%202024-08-14%2015-23-56.png)
 
 ### **Alertmanager Configuration (`/etc/alertmanager/alertmanager.yml`)**
 
