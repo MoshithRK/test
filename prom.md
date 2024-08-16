@@ -484,7 +484,7 @@ scrape_configs:
 
   ```
 
-### . **Check the Logs**
+###  **Check the Logs**
 
 Now, Prometheus and your exporters should be logging to syslog. You can check the logs using:
 
