@@ -515,6 +515,18 @@ sudo tail -f /var/log/syslog | grep prometheus
 ![Image](https://github.com/devopsflash/test/blob/main/Screenshot%20from%202024-08-16%2014-05-58.png)
 
 
+<table style="width: 100%;">
+  <tr>
+    <td style="text-align: left; width: 50%;">
+      <a href="https://github.com/rcms-org/proof-of-concepts/edit/main/docs/monitor/prometheus.md">Step 1</a>
+    </td>
+    <td style="text-align: right; width: 50%;">
+      <a href="https://github.com/rcms-org/proof-of-concepts/blob/main/docs/monitor/Alertmanager.md">Step 3</a>
+    </td>
+  </tr>
+</table>
+
+
 
 ```bash
 sudo tail -f /var/log/syslog | grep node_exporter
