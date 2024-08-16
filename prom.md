@@ -47,33 +47,35 @@ This guide covers setting up Prometheus along with Node Exporter and Alertmanage
    ```
 
    ```ini
-   [Unit]
-Description=Prometheus
-Wants=network-online.target
-After=network-online.target
+    [Unit]
+   Description=Prometheus
+   Wants=network-online.target
+   After=network-online.target
 
-[Service]
-User=prometheus
-Group=prometheus
-ExecStart=/usr/local/bin/prometheus \
-  --config.file=/etc/prometheus/prometheus.yml \
-  --storage.tsdb.path=/var/lib/prometheus/data \
-  --storage.tsdb.retention.time=90d \                # <-- Added this line for data retention
-  --web.console.templates=/usr/local/share/prometheus/consoles \
-  --web.console.libraries=/usr/local/share/prometheus/console_libraries \
-  --web.listen-address=0.0.0.0:777 \                # <-- Updated the port here
-  --log.level=info
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=prometheus
+   [Service]
+   User=prometheus
+   Group=prometheus
+   ExecStart=/usr/local/bin/prometheus \
+     --config.file=/etc/prometheus/prometheus.yml \
+     --storage.tsdb.path=/var/lib/prometheus/data \
+     --storage.tsdb.retention.time=90d \
+     --web.console.templates=/usr/local/share/prometheus/consoles \   
+     --web.console.libraries=/usr/local/share/prometheus/console_libraries \
+     --web.listen-address=0.0.0.0:8080 \
+     --log.level=info
+   StandardOutput=syslog
+   StandardError=syslog
+   SyslogIdentifier=prometheus
 
-[Install]
-WantedBy=multi-user.target
+   [Install]
+   WantedBy=multi-user.target
+
 
    ```
 
 6. **Start and enable Prometheus**:
    ```bash
+   sudo systemctl stop prometheus
    sudo systemctl daemon-reload
    sudo systemctl start prometheus
    sudo systemctl enable prometheus
@@ -110,20 +112,29 @@ WantedBy=multi-user.target
    ```ini
    [Unit]
    Description=Node Exporter
-   Documentation=https://prometheus.io/docs/guides/node-exporter/
+   Wants=network-online.target
    After=network-online.target
 
    [Service]
    User=node_exporter
    Group=node_exporter
-   ExecStart=/usr/local/bin/node_exporter
+   ExecStart=/usr/local/bin/node_exporter \
+     --web.listen-address=:7777 \
+     --log.level=info
+   StandardOutput=syslog
+   StandardError=syslog
+   SyslogIdentifier=node_exporter
 
    [Install]
    WantedBy=multi-user.target
+
+
+
    ```
 
 6. **Start and enable Node Exporter**:
    ```bash
+   sudo systemctl stop node_exporter
    sudo systemctl daemon-reload
    sudo systemctl start node_exporter
    sudo systemctl enable node_exporter
@@ -461,14 +472,16 @@ rule_files:
 scrape_configs:
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: ['localhost:8080']
 
   - job_name: 'local_node_exporter'
     static_configs:
-      - targets: ['localhost:9100']
+      - targets: ['localhost:7777']
 
   - job_name: 'remote_node_exporter'
     static_configs:
-      - targets: ['192.168.1.181:9100']
+      - targets: ['192.168.1.181:7777']
+
+
 ```
 
