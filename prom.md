@@ -531,18 +531,17 @@ sudo tail -f /var/log/syslog | grep alertmanager
 
 This will display the logs filtered by the specific service tag.
 
-
 <table style="width: 100%;">
   <tr>
-    <td style="text-align: left; width: 50%;">
+    <td align="left">
       <a href="https://github.com/rcms-org/proof-of-concepts/edit/main/docs/monitor/prometheus.md">Step 1</a>
     </td>
-    <td style="text-align: right; width: 50%;">
+    <td style="width: 100%;"></td> <!-- Spacer column -->
+    <td align="right">
       <a href="https://github.com/rcms-org/proof-of-concepts/blob/main/docs/monitor/Alertmanager.md">Step 3</a>
     </td>
   </tr>
 </table>
-
 
 
 
