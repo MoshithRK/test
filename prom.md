@@ -484,7 +484,7 @@ scrape_configs:
 
   ```
 
-### 3. **Check the Logs**
+### . **Check the Logs**
 
 Now, Prometheus and your exporters should be logging to syslog. You can check the logs using:
 
@@ -500,6 +500,4 @@ sudo tail -f /var/log/syslog | grep node_exporter
 
 This will display the logs filtered by the specific service tag.
 
-
-```
 
