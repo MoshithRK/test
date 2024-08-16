@@ -502,7 +502,7 @@ scrape_configs:
 
   ```
 
-###  **Check the Logs **
+###  Check the Logs 
 
 Now, Prometheus and your exporters should be logging to syslog. You can check the logs using:
 
@@ -510,8 +510,10 @@ Now, Prometheus and your exporters should be logging to syslog. You can check th
 sudo tail -f /var/log/syslog | grep prometheus
 ```
 
-###  **Expected outcome **
+
+###  *Expected outcome 
 ![Image](https://github.com/devopsflash/test/blob/main/Screenshot%20from%202024-08-16%2014-05-58.png)
+
 
 
 ```bash
