@@ -482,6 +482,24 @@ scrape_configs:
     static_configs:
       - targets: ['192.168.1.181:7777']
 
+  ```
+
+### 3. **Check the Logs**
+
+Now, Prometheus and your exporters should be logging to syslog. You can check the logs using:
+
+```bash
+sudo tail -f /var/log/syslog | grep prometheus
+```
+
+or
+
+```bash
+sudo tail -f /var/log/syslog | grep node_exporter
+```
+
+This will display the logs filtered by the specific service tag.
+
 
 ```
 
