@@ -48,21 +48,28 @@ This guide covers setting up Prometheus along with Node Exporter and Alertmanage
 
    ```ini
    [Unit]
-   Description=Prometheus Monitoring
-   Documentation=https://prometheus.io/docs/introduction/overview/
-   After=network-online.target
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
 
-   [Service]
-   User=prometheus
-   Group=prometheus
-   ExecStart=/usr/local/bin/prometheus \
-     --config.file /etc/prometheus/prometheus.yml \
-     --storage.tsdb.path /var/lib/prometheus/ \
-     --web.console.templates=/usr/share/prometheus/consoles \
-     --web.console.libraries=/usr/share/prometheus/console_libraries
+[Service]
+User=prometheus
+Group=prometheus
+ExecStart=/usr/local/bin/prometheus \
+  --config.file=/etc/prometheus/prometheus.yml \
+  --storage.tsdb.path=/var/lib/prometheus/data \
+  --storage.tsdb.retention.time=90d \                # <-- Added this line for data retention
+  --web.console.templates=/usr/local/share/prometheus/consoles \
+  --web.console.libraries=/usr/local/share/prometheus/console_libraries \
+  --web.listen-address=0.0.0.0:777 \                # <-- Updated the port here
+  --log.level=info
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=prometheus
 
-   [Install]
-   WantedBy=multi-user.target
+[Install]
+WantedBy=multi-user.target
+
    ```
 
 6. **Start and enable Prometheus**:
