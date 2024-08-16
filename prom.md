@@ -526,6 +526,8 @@ sudo tail -f /var/log/syslog | grep node_exporter
 sudo tail -f /var/log/syslog | grep alertmanager
 ```
 
+###  Expected outcome
+![Image](https://github.com/devopsflash/test/blob/main/Screenshot%20from%202024-08-16%2014-46-22.png)
 
 This will display the logs filtered by the specific service tag.
 
