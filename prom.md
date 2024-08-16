@@ -536,9 +536,9 @@ This will display the logs filtered by the specific service tag.
     <td align="left">
       <a href="https://github.com/rcms-org/proof-of-concepts/edit/main/docs/monitor/prometheus.md">Step 1</a>
     </td>
-    <td style="width: 1000%;"></td> <!-- Spacer column -->
+    <td style="width: 100%;"></td> <!-- Spacer column -->
     <td align="right">
-      <a href="https://github.com/rcms-org/proof-of-concepts/blob/main/docs/monitor/Alertmanager.md">Step 3</a>
+      <a href="https://github.com/rcms-org/proof-of-concepts/blob/main/docs/monitor/Alertmanager.md">                                                               Step 3</a>
     </td>
   </tr>
 </table>
