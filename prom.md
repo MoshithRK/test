@@ -61,7 +61,7 @@ This guide covers setting up Prometheus along with Node Exporter and Alertmanage
      --storage.tsdb.retention.time=90d \
      --web.console.templates=/usr/local/share/prometheus/consoles \   
      --web.console.libraries=/usr/local/share/prometheus/console_libraries \
-     --web.listen-address=0.0.0.0:8080 \
+     --web.listen-address=0.0.0.0:19091 \
      --log.level=info
    StandardOutput=syslog
    StandardError=syslog
@@ -119,7 +119,7 @@ This guide covers setting up Prometheus along with Node Exporter and Alertmanage
    User=node_exporter
    Group=node_exporter
    ExecStart=/usr/local/bin/node_exporter \
-     --web.listen-address=:7777 \
+     --web.listen-address=:19095 \
      --log.level=info
    StandardOutput=syslog
    StandardError=syslog
@@ -164,6 +164,9 @@ This guide covers setting up Prometheus along with Node Exporter and Alertmanage
    sudo chown alertmanager:alertmanager /usr/local/bin/alertmanager /usr/local/bin/amtool
    sudo mkdir /etc/alertmanager
    sudo chown -R alertmanager:alertmanager /etc/alertmanager
+   sudo mkdir -p /var/lib/alertmanager/data
+   sudo chown -R alertmanager:alertmanager /var/lib/alertmanager
+
    ```
 
 5. **Create the Alertmanager systemd service file**:
@@ -172,7 +175,7 @@ This guide covers setting up Prometheus along with Node Exporter and Alertmanage
    ```
 
    ```ini
-   [Unit]
+     [Unit]
    Description=Alertmanager
    Documentation=https://prometheus.io/docs/alerting/latest/alertmanager/
    After=network-online.target
@@ -181,14 +184,22 @@ This guide covers setting up Prometheus along with Node Exporter and Alertmanage
    User=alertmanager
    Group=alertmanager
    ExecStart=/usr/local/bin/alertmanager \
-     --config.file /etc/alertmanager/alertmanager.yml
+     --config.file /etc/alertmanager/alertmanager.yml \
+     --web.listen-address=:19097 \
+     --log.level=info \
+     --storage.path=/var/lib/alertmanager/data
+   StandardOutput=syslog
+   StandardError=syslog
+   SyslogIdentifier=alertmanager
 
    [Install]
    WantedBy=multi-user.target
+
    ```
 
 6. **Start and enable Alertmanager**:
    ```bash
+   sudo systemctl stop alertmanager
    sudo systemctl daemon-reload
    sudo systemctl start alertmanager
    sudo systemctl enable alertmanager
@@ -472,19 +483,19 @@ rule_files:
 scrape_configs:
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['localhost:8080']
+      - targets: ['localhost:19091']
         labels:
           instance: 'prometheus'
 
   - job_name: 'local_node_exporter'
     static_configs:
-      - targets: ['localhost:7777']
+      - targets: ['localhost:19095']
         labels:
           instance: 'erp'
 
   - job_name: 'remote_node_exporter'
     static_configs:
-      - targets: ['192.168.1.181:7777']
+      - targets: ['192.168.1.181:19095']
         labels:
           instance: 'node1'
 
@@ -499,11 +510,17 @@ Now, Prometheus and your exporters should be logging to syslog. You can check th
 sudo tail -f /var/log/syslog | grep prometheus
 ```
 
-or
+
 
 ```bash
 sudo tail -f /var/log/syslog | grep node_exporter
 ```
+
+
+```bash
+sudo tail -f /var/log/syslog | grep alertmanager
+```
+
 
 This will display the logs filtered by the specific service tag.
 
