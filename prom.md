@@ -511,7 +511,7 @@ sudo tail -f /var/log/syslog | grep prometheus
 ```
 
 
-###  *Expected outcome 
+###  Expected outcome 
 ![Image](https://github.com/devopsflash/test/blob/main/Screenshot%20from%202024-08-16%2014-05-58.png)
 
 
@@ -519,7 +519,8 @@ sudo tail -f /var/log/syslog | grep prometheus
 ```bash
 sudo tail -f /var/log/syslog | grep node_exporter
 ```
-
+###  Expected outcome 
+![Image](https://github.com/devopsflash/test/blob/main/Screenshot%20from%202024-08-16%2014-04-33.png)
 
 ```bash
 sudo tail -f /var/log/syslog | grep alertmanager
