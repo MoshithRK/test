@@ -455,7 +455,7 @@ inhibit_rules:
 Edit the Prometheus configuration file `/etc/prometheus/prometheus.yml` to include your Node Exporter and Alertmanager targets:
 
 ```yaml
-global:
+   global:
   scrape_interval: 15s
   evaluation_interval: 15s
 
@@ -473,14 +473,21 @@ scrape_configs:
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:8080']
+        labels:
+          instance: 'prometheus'
 
   - job_name: 'local_node_exporter'
     static_configs:
       - targets: ['localhost:7777']
+        labels:
+          instance: 'erp'
 
   - job_name: 'remote_node_exporter'
     static_configs:
       - targets: ['192.168.1.181:7777']
+        labels:
+          instance: 'node1'
+
 
   ```
 
