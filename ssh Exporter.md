@@ -167,10 +167,3 @@ Example metrics:
 
 - Ensure that the virtual environment is activated and the correct Python interpreter is being used.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-This should be good to go for uploading to GitHub!
