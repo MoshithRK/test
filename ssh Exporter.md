@@ -1,16 +1,18 @@
-### README.md for SSH Login Exporter
 
-```markdown
+---
+
 # SSH Login Exporter
 
 This project provides a Prometheus exporter that monitors SSH login activity on your server. It collects the number of currently logged-in SSH users and provides the data to Prometheus.
 
 ## Features
+
 - Tracks the number of SSH users currently logged in.
 - Lists the usernames of the logged-in SSH users.
 - Exposes the metrics on port `9101` for Prometheus to scrape.
 
 ## Prerequisites
+
 - Ubuntu 18.04 or later
 - Python 3.x
 - Prometheus
@@ -19,33 +21,37 @@ This project provides a Prometheus exporter that monitors SSH login activity on 
 
 ### Step 1: Install Required Packages
 
-1. Update your package list and install Python 3 and `pip`.
+1. Update your package list and install Python 3 and `pip`:
+
    ```bash
    sudo apt-get update
    sudo apt-get install python3 python3-pip python3-venv -y
    ```
 
-2. Create a virtual environment for the project.
+2. Create a virtual environment for the project:
+
    ```bash
    python3 -m venv myenv
    source myenv/bin/activate
    ```
 
-3. Install the `prometheus_client` library.
+3. Install the `prometheus_client` library:
+
    ```bash
    pip install prometheus-client
    ```
 
 ### Step 2: Setup SSH Login Exporter
 
-1. Create the directory for the SSH Login Exporter script.
+1. Create the directory for the SSH Login Exporter script:
+
    ```bash
    sudo mkdir -p /opt/prometheus_exporters
    sudo chown $USER:$USER /opt/prometheus_exporters
    sudo chmod 755 /opt/prometheus_exporters
    ```
 
-2. Copy the following Python script to `/opt/prometheus_exporters/ssh_login_exporter.py`.
+2. Copy the following Python script to `/opt/prometheus_exporters/ssh_login_exporter.py`:
 
    ```python
    from prometheus_client import start_http_server, Gauge, Info
@@ -80,14 +86,15 @@ This project provides a Prometheus exporter that monitors SSH login activity on 
            time.sleep(15)
    ```
 
-3. Make the script executable.
+3. Make the script executable:
+
    ```bash
    sudo chmod +x /opt/prometheus_exporters/ssh_login_exporter.py
    ```
 
 ### Step 3: Create a Systemd Service
 
-1. Create a systemd service file at `/etc/systemd/system/ssh_login_exporter.service`.
+1. Create a systemd service file at `/etc/systemd/system/ssh_login_exporter.service`:
 
    ```ini
    [Unit]
@@ -105,25 +112,28 @@ This project provides a Prometheus exporter that monitors SSH login activity on 
    WantedBy=multi-user.target
    ```
 
-2. Reload systemd and start the service.
+2. Reload systemd and start the service:
+
    ```bash
    sudo systemctl daemon-reload
    sudo systemctl start ssh_login_exporter.service
    ```
 
-3. Enable the service to start on boot.
+3. Enable the service to start on boot:
+
    ```bash
    sudo systemctl enable ssh_login_exporter.service
    ```
 
-4. Check the status of the service.
+4. Check the status of the service:
+
    ```bash
    sudo systemctl status ssh_login_exporter.service
    ```
 
 ### Step 4: Integrate with Prometheus
 
-1. Update your Prometheus configuration (`/opt/prometheus/prometheus.yml`) to include the SSH Login Exporter.
+1. Update your Prometheus configuration (`/opt/prometheus/prometheus.yml`) to include the SSH Login Exporter:
 
    ```yaml
    scrape_configs:
@@ -132,7 +142,8 @@ This project provides a Prometheus exporter that monitors SSH login activity on 
          - targets: ['localhost:9101']
    ```
 
-2. Reload Prometheus to apply the changes.
+2. Reload Prometheus to apply the changes:
+
    ```bash
    sudo systemctl restart prometheus.service
    ```
@@ -142,12 +153,14 @@ This project provides a Prometheus exporter that monitors SSH login activity on 
 The SSH Login Exporter exposes metrics at `http://localhost:9101/metrics`. Prometheus can scrape this endpoint to collect SSH login metrics.
 
 Example metrics:
+
 - `ssh_user_count`: Number of SSH users currently logged in.
 - `ssh_users`: List of SSH users currently logged in.
 
 ## Troubleshooting
 
 - If the service does not start, check the logs with:
+
   ```bash
   journalctl -u ssh_login_exporter.service
   ```
@@ -157,8 +170,7 @@ Example metrics:
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-```
 
 ---
 
-This README provides step-by-step instructions on setting up the SSH Login Exporter, making it suitable for uploading to GitHub.
+This should be good to go for uploading to GitHub!
