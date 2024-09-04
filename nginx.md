@@ -1,6 +1,4 @@
-Here's a properly formatted and refined version of your guide:
 
----
 
 # Setting Up a Reverse Proxy for Prometheus Using Nginx
 
