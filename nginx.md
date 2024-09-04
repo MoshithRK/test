@@ -1,6 +1,7 @@
-Here's an updated version of the `README.md` file that includes instructions for restricting access to Prometheus using HTTP Basic Authentication:
+Here's a properly formatted and refined version of your guide:
 
-```markdown
+---
+
 # Setting Up a Reverse Proxy for Prometheus Using Nginx
 
 This guide explains how to configure Nginx as a reverse proxy for Prometheus. The reverse proxy will allow you to access Prometheus via a custom domain name, secure it using SSL, and optionally restrict access using HTTP Basic Authentication.
@@ -9,8 +10,8 @@ This guide explains how to configure Nginx as a reverse proxy for Prometheus. Th
 
 - A server running Prometheus on port `19091`.
 - A domain name (e.g., `prometheus.radianterp.in`).
-- Basic knowledge of Nginx and Linux command line.
-- Optional: SSL certificate (recommended for securing access).
+- Basic knowledge of Nginx and the Linux command line.
+- **Optional**: SSL certificate (recommended for securing access).
 
 ## Step 1: Install Nginx
 
@@ -43,14 +44,14 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_buffering off;
-        
+
         # HTTP Basic Authentication
         auth_basic "Restricted Access";
         auth_basic_user_file /etc/nginx/.htpasswd;
     }
 
     # Optional: handle SSL (HTTPS)
-    # Uncomment and configure if you have SSL certificate
+    # Uncomment and configure if you have an SSL certificate
     # listen 443 ssl;
     # ssl_certificate /path/to/ssl_certificate.crt;
     # ssl_certificate_key /path/to/ssl_certificate.key;
@@ -83,9 +84,9 @@ To restrict access using HTTP Basic Authentication:
     sudo htpasswd -c /etc/nginx/.htpasswd yourusername
     ```
 
-   Replace `yourusername` with the desired username. You'll be prompted to enter a password.
+    Replace `yourusername` with the desired username. You'll be prompted to enter a password.
 
-3. (Optional) Add more users without the `-c` option:
+3. **Optional**: Add more users without the `-c` option:
 
     ```bash
     sudo htpasswd /etc/nginx/.htpasswd anotheruser
@@ -122,26 +123,3 @@ To secure the connection with SSL, configure the SSL certificate in your Nginx c
 ```bash
 sudo systemctl reload nginx
 ```
-
-## Step 9: Set Up Firewall Rules (if applicable)
-
-Ensure your firewall allows traffic on HTTP (port 80) and HTTPS (port 443):
-
-```bash
-sudo ufw allow 'Nginx Full'
-```
-
-## Conclusion
-
-Following these steps, you have successfully set up Nginx as a reverse proxy for Prometheus with HTTP Basic Authentication and optional SSL. This setup enhances security by restricting access to authorized users and securing the connection with HTTPS.
-
-For further assistance or to contribute to this guide, feel free to open an issue or submit a pull request.
-
----
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-```
-
-This updated `README.md` file includes detailed instructions on setting up HTTP Basic Authentication with Nginx, along with the reverse proxy configuration for Prometheus. You can save this content in your repository's `README.md` file to document the process.
