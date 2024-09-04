@@ -33,29 +33,47 @@ Add the following configuration to the file:
 ```nginx
 server {
     listen 80;
-    server_name prometheus.radianterp.in;  # Replace with your domain
+    server_name prometheus.radianterp.in;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name prometheus.radianterp.in;
+
+    ssl_certificate /etc/nginx/ssl/radianterp.in/STAR_radianterp_in.chained.crt;
+    ssl_certificate_key /etc/nginx/ssl/radianterp.in/private.key;
+
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+    ssl_session_tickets off;
+
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+    add_header X-XSS-Protection "1; mode=block";
+    add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload" always;
+
+    access_log /var/log/nginx/prometheus.radianterp.in.access.log;
+    error_log /var/log/nginx/prometheus.radianterp.in.error.log;
 
     location / {
-        proxy_pass http://localhost:19091;  # Replace with your Prometheus URL
+        auth_basic "Restricted Access";               
+        auth_basic_user_file /etc/nginx/.htpasswd;     
+
+        proxy_pass http://localhost:19091;             
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_buffering off;
-
-        # HTTP Basic Authentication
-        auth_basic "Restricted Access";
-        auth_basic_user_file /etc/nginx/.htpasswd;
+        proxy_read_timeout 3600s;
+        proxy_connect_timeout 3600s;
+        proxy_send_timeout 3600s;
     }
-
-    # Optional: handle SSL (HTTPS)
-    # Uncomment and configure if you have an SSL certificate
-    # listen 443 ssl;
-    # ssl_certificate /path/to/ssl_certificate.crt;
-    # ssl_certificate_key /path/to/ssl_certificate.key;
-    # ssl_protocols TLSv1.2 TLSv1.3;
-    # ssl_ciphers 'HIGH:!aNULL:!MD5';
 }
+
 ```
 
 ## Step 3: Enable the Configuration
