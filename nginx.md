@@ -128,14 +128,4 @@ sudo systemctl restart nginx
 
 Access Prometheus using your domain name in a web browser (e.g., `http://prometheus.radianterp.in`). You should be prompted to enter the username and password configured in the `.htpasswd` file.
 
-## Step 8: Configure SSL (Optional but Recommended)
 
-To secure the connection with SSL, configure the SSL certificate in your Nginx configuration file:
-
-1. Obtain an SSL certificate (e.g., using Let's Encrypt).
-2. Uncomment and modify the SSL-related lines in the Nginx configuration.
-3. Reload Nginx to apply the SSL settings:
-
-```bash
-sudo systemctl reload nginx
-```
