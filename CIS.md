@@ -241,5 +241,11 @@ sudo chmod -R 755 /var/www/html
 By following these steps, you can harden your PHP 8.3.13 environment and significantly reduce security risks. Regularly review and update your PHP configurations as new vulnerabilities arise to maintain a secure environment.
 
 --- 
+### References
+- [PHP INI Configuration Options](https://www.php.net/manual/en/ini.list.php)
+- [PHP Session Security](https://www.php.net/manual/en/session.security.php)
+- [PHP Security Guide](https://www.php.net/manual/en/security.php)
+
+--- 
 
 This document focuses solely on securing the PHP environment based on CIS Benchmark guidelines, ensuring your PHP environment is protected from common vulnerabilities.
