@@ -4,29 +4,7 @@
 
 # PHP CIS Benchmark Configuration and Implementation (PHP 8.3.13)
 
-## Table of Contents
-1. [Introduction](#introduction)
-2. [Prerequisites](#prerequisites)
-3. [PHP Version Identification](#php-version-identification)
-4. [Install and Update PHP](#install-and-update-php)
-5. [Locate PHP Configuration File](#locate-php-configuration-file)
-6. [Harden `php.ini` Settings](#harden-phpini-settings)
-   - Disable Unnecessary Functions
-   - Disable PHP Version Exposure
-   - Error Handling and Logging
-   - File Uploads
-   - Secure Session Configuration
-   - Limit Resource Usage
-   - Disable Remote Code Execution
-   - Disable X-Powered-By Header
-7. [Server Hardening Steps](#server-hardening-steps)
-   - Configure PHP-FPM
-   - Secure File Permissions
-   - Secure Web Server Configuration
-8. [File Permissions and Ownership](#file-permissions-and-ownership)
-9. [Conclusion](#conclusion)
 
----
 
 ## 1. **Introduction**
 This document outlines steps to secure a PHP environment (version 8.3.13) following the recommendations of the CIS (Center for Internet Security) benchmark. These measures help mitigate security risks by properly configuring PHP.
