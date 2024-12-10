@@ -1,4 +1,3 @@
-Got it! Below are the detailed steps to install and configure the **Nginx Exporter** on Ubuntu to monitor Nginx with **Prometheus**.
 
 ---
 
