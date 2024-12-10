@@ -48,7 +48,7 @@ This guide provides step-by-step instructions to install and configure **MongoDB
    Log in to MongoDB shell and create the necessary user:
 
    ```bash
-   mongo
+   sudo mongosh
    ```
 
    Then, in the MongoDB shell, run:
