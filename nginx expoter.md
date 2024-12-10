@@ -90,7 +90,7 @@ Restart=on-failure
 RestartSec=5s
 ExecStart=/usr/local/bin/nginx-prometheus-exporter \
   --web.listen-address=:19113 \
-  --nginx.scrape-uri=http://10.102.3.100:8080/nginx_status/stub_status \
+  --nginx.scrape-uri=http://localhost:8080/nginx_status/stub_status \
   --log.level=error
 
 [Install]
