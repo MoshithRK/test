@@ -64,7 +64,7 @@ Type=simple
 Restart=on-failure
 RestartSec=5s
 ExecStart=/usr/local/bin/nginx-prometheus-exporter --web.listen-address=:19113 --nginx.scrape-uri=http://192.168.1.181:8080/nginx_status/stub_status  --log.level=error
-#use localhost ip(http://192.168.1.181:8080/nginx_status/stub_status)
+#use localhost ip(http://192.168.1.181:8080/nginx_status/stub_status)(use hostname -i)
 [Install]
 WantedBy=multi-user.target
 ```
