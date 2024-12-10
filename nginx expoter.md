@@ -1,6 +1,4 @@
-Got it! You want to configure the NGINX Prometheus Exporter to listen on port `19113` and scrape NGINX metrics from a remote NGINX server at `http://10.102.3.100:8080/nginx_status/stub_status`.
 
-Here’s how to update the **systemd service** to use the remote NGINX status page URL.
 
 ### Full Steps to Install and Configure NGINX Prometheus Exporter with Remote NGINX Status URL
 
