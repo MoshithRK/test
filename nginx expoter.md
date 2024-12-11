@@ -169,6 +169,5 @@ server {
         deny all;
     }
 }
-rcmsusr@identity-server:/etc/nginx/conf.d$
 ```
 
