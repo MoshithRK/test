@@ -153,3 +153,22 @@ sudo systemctl reload prometheus
 - **Configure Prometheus** to scrape the exporter metrics.
 
 This setup will allow you to run the `nginx-prometheus-exporter` on your Ubuntu system and expose NGINX metrics for Prometheus to scrape. Let me know if you need any further assistance!
+
+
+```bash
+#:/etc/nginx/conf.d$ cat status.conf 
+server {
+    listen 8000;
+    server_name 192.168.1.181;
+
+    location /nginx_status {
+        stub_status on;  
+        access_log off;
+        #access_log off;
+        allow 192.168.1.0/24;
+        deny all;
+    }
+}
+rcmsusr@identity-server:/etc/nginx/conf.d$
+```
+
