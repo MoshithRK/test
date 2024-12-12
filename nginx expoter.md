@@ -170,4 +170,4 @@ server {
     }
 }
 ```
-
+https://antonputra.com/monitoring/monitor-nginx-with-prometheus/#expose-basic-nginx-metrics
