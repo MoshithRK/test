@@ -1,8 +1,4 @@
-### **Complete Steps for MySQL Database Backup, Compression, and Restoration Using SCP**
 
-This document will cover all steps required to back up a MySQL database, compress it, transfer it using SCP, and restore it on another server, including database creation and necessary MySQL operations.
-
----
 
 ### **1. Backup MySQL Database (Creating a Dump File)**
 
