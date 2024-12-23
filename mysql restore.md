@@ -172,22 +172,4 @@ This will delete the temporary files to free up space.
 
 ---
 
-### **6. Troubleshooting Tips**
 
-- **File Permissions**: Ensure that both the dump file and the SSH key have the correct permissions.
-- **MySQL Access Denied**: If you encounter the `Access denied` error, ensure that the `root` user has the necessary privileges and is able to authenticate properly.
-- **SCP Issues**: If you encounter an issue with SCP, verify that SSH is properly set up, and that the destination directory on the remote server is writable.
-
----
-
-### **7. Conclusion**
-
-This process involves the following major steps:
-1. **Creating a MySQL dump** of the database using `mysqldump`.
-2. **Compressing** the dump file to reduce its size using `zip`.
-3. **Transferring** the compressed file to another server using SCP.
-4. **Restoring** the MySQL database from the dump using SQL queries within MySQL.
-
-By following these steps, you can easily back up, compress, transfer, and restore your MySQL databases across servers.
-
-Let me know if you have any further questions!
