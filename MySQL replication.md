@@ -1,4 +1,3 @@
-Here is the **complete, step-by-step process** for setting up MySQL replication, ensuring clarity and correctness.
 
 ---
 
@@ -298,7 +297,7 @@ Verify that there are no firewall rules or network issues blocking the connectio
 - Ensure all changes are tested in a staging environment before applying to production.
 
 ### References
-- [MySQL Documentation](https://dev.mysql.com/doc/)
+  - [MySQL Documentation](https://www.linuxtrainingacademy.com/mysql-master-slave-replication-ubuntu-linux/)
 
 
 
