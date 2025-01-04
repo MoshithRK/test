@@ -200,37 +200,76 @@ You should see all three nodes listed.
 ## License
 This setup guide is provided under the MIT License.
 
-Steps:
-Install MySQL
-apt-get update; apt-get -y install mysql-server-8.0
 
-Open up access to the ports 3306 and 33061 in the firewall
+
+
+
+
+
+
+
+
+
+
+
+### Steps to Configure MySQL Group Replication
+
+#### 1. Install MySQL
+Run the following commands to install MySQL:
+```bash
+apt-get update
+apt-get -y install mysql-server-8.0
+```
+
+#### 2. Configure Firewall Rules
+
+- Open ports 3306 and 33061 in the firewall:
+```bash
 ufw allow 3306
+```
 
-Server 1
-ufw allow from server2_ip to any port 33061
-ufw allow from server3_ip to any port 33061
+- Server-specific rules:
+  
+  **Server 1**
+  ```bash
+  ufw allow from <server2_ip> to any port 33061
+  ufw allow from <server3_ip> to any port 33061
+  ```
 
-Server 2
-ufw allow from server1_ip to any port 33061
-ufw allow from server3_ip to any port 33061
+  **Server 2**
+  ```bash
+  ufw allow from <server1_ip> to any port 33061
+  ufw allow from <server3_ip> to any port 33061
+  ```
 
-Server 3
-ufw allow from server1_ip to any port 33061
-ufw allow from server2_ip to any port 33061
+  **Server 3**
+  ```bash
+  ufw allow from <server1_ip> to any port 33061
+  ufw allow from <server2_ip> to any port 33061
+  ```
 
-Generate UUID
+#### 3. Generate a UUID
+Generate a unique identifier for the replication group:
+```bash
 uuidgen
-Output
+```
+Example output:
+```
 168dcb64-7cce-473a-b338-6501f305e561
+```
 
-Modify the configuration of server 1.
+#### 4. Modify MySQL Configuration
+
+Edit the MySQL configuration file on **Server 1**:
+```bash
 vi /etc/mysql/my.cnf
+```
 
-ALL MYSQL
+Add the following configuration:
+```ini
 [mysqld]
 
-General replication settings
+# General replication settings
 disabled_storage_engines="MyISAM,BLACKHOLE,FEDERATED,ARCHIVE,MEMORY"
 gtid_mode = ON
 enforce_gtid_consistency = ON
@@ -246,61 +285,82 @@ loose-group_replication_start_on_boot = OFF
 loose-group_replication_ssl_mode = REQUIRED
 loose-group_replication_recovery_use_ssl = 1
 
-Shared replication group configuration
+# Shared replication group configuration
 loose-group_replication_group_name = "168dcb64-7cce-473a-b338-6501f305e561"
 loose-group_replication_ip_allowlist = "mysql1,mysql2,mysql3"
 loose-group_replication_group_seeds = "mysql1:33061,mysql2:33061,mysql3:33061"
 
-For multi-primary mode, where any host can accept writes
+# For multi-primary mode
 loose-group_replication_single_primary_mode = OFF
 loose-group_replication_enforce_update_everywhere_checks = ON
 
-Host specific replication configuration
+# Host-specific replication configuration
 bind-address = "0.0.0.0"
-server_id = " "
-report_host = " "
-loose-group_replication_local_address = " :33061"
+server_id = "<unique_server_id>"
+report_host = "<server_hostname_or_ip>"
+loose-group_replication_local_address = "<server_ip>:33061"
+```
 
-Restart mysql
+Restart MySQL:
+```bash
 systemctl restart mysql
+```
 
-Configuring Replication Users and Enabling Group Replication Plugin
+#### 5. Configure Replication Users and Enable Group Replication Plugin
+
+Log in to MySQL:
+```bash
 mysql
-
+```
+Run the following commands:
+```sql
 SET SQL_LOG_BIN=0;
 CREATE USER 'repl'@'%' IDENTIFIED BY 'Password123!' REQUIRE SSL;
-GRANT REPLICATION SLAVE ON . TO 'repl'@'%';
+GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
 FLUSH PRIVILEGES;
 SET SQL_LOG_BIN=1;
 CHANGE REPLICATION SOURCE TO SOURCE_USER='repl', SOURCE_PASSWORD='Password123!' FOR CHANNEL 'group_replication_recovery';
 INSTALL PLUGIN group_replication SONAME 'group_replication.so';
 SHOW PLUGINS;
+```
 
-Starting Group Replication
-Server 1
-SET GLOBAL group_replication_bootstrap_group=ON;
-START GROUP_REPLICATION;
-SET GLOBAL group_replication_bootstrap_group=OFF;
-SELECT * FROM performance_schema.replication_group_members\G;
+#### 6. Start Group Replication
 
-Server 2 and Server 3
-START GROUP_REPLICATION;
-SELECT * FROM performance_schema.replication_group_members;
+- **Server 1**:
+  ```sql
+  SET GLOBAL group_replication_bootstrap_group=ON;
+  START GROUP_REPLICATION;
+  SET GLOBAL group_replication_bootstrap_group=OFF;
+  SELECT * FROM performance_schema.replication_group_members\G;
+  ```
 
-Test replication
-Server 3
-CREATE DATABASE lazy;
+- **Server 2 and Server 3**:
+  ```sql
+  START GROUP_REPLICATION;
+  SELECT * FROM performance_schema.replication_group_members;
+  ```
 
-Server 1
-SHOW DATABASES;
-USE lazy;
-CREATE TABLE admins (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
-);
+#### 7. Test Replication
 
-Server 2
-SHOW DATABASES;
-USE lazy;
-SHOW TABLES;
+- On **Server 3**, create a database:
+  ```sql
+  CREATE DATABASE lazy;
+  ```
+
+- On **Server 1**, verify the database exists and create a table:
+  ```sql
+  SHOW DATABASES;
+  USE lazy;
+  CREATE TABLE admins (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(255) NOT NULL
+  );
+  ```
+
+- On **Server 2**, verify the table exists:
+  ```sql
+  SHOW DATABASES;
+  USE lazy;
+  SHOW TABLES;
+  ```
 
