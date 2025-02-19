@@ -1,0 +1,150 @@
+groups:
+  - name: critical
+    rules:
+      - alert: UserLogin
+        expr: node_logind_sessions > 0
+        for: 0m
+        labels:
+          service: Temperature
+          severity: critical
+        annotations:
+          summary: "User logged on the {{ $labels.instance }}"
+          description: "A user has logged into the instance {{ $labels.instance }}. There are currently {{ $value }} active user sessions on this instance."
+
+      - alert: HighTemperatureInfo
+        expr: node_thermal_zone_temp > 70
+        for: 5m
+        labels:
+          service: Temperature
+          severity: critical
+        annotations:
+          summary: "High temperature on {{ $labels.instance }}"
+          description: "The temperature on instance {{ $labels.instance }} is high at {{ $value }}°C, exceeding the 70°C threshold."
+
+      - alert: HostFilesystemDeviceError
+        expr: node_filesystem_device_error == 1
+        for: 2m
+        labels:
+          service: Filesystem
+          severity: critical
+        annotations:
+          summary: "Host filesystem device error on {{ $labels.instance }}"
+          description: "A device error has occurred on the {{ $labels.mountpoint }} filesystem of instance {{ $labels.instance }}."
+
+      - alert: PrometheusTargetMissing
+        expr: up == 0
+        for: 0m
+        labels:
+          service: PrometheusTarget
+          severity: critical
+        annotations:
+          summary: "{{ $labels.job }} target down on {{ $labels.instance }} instance"
+          description: "The Prometheus target for job {{ $labels.job }} on instance {{ $labels.instance }} is down (status: {{ $value }}). The target is missing or unreachable."
+
+      - alert: HighSwapUsage
+        expr: (((node_memory_SwapTotal_bytes - node_memory_SwapFree_bytes) / node_memory_SwapTotal_bytes) * 100) > 85
+        for: 5m
+        labels:
+          service: Memory
+          severity: critical
+        annotations:
+          summary: "High swap usage on {{ $labels.instance }}"
+          description: "Swap usage on instance {{ $labels.instance }} has exceeded 85%, with the current usage at {{ $value }}%."
+
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 90
+        for: 5m
+        labels:
+          service: CPU
+        severity: critical
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+          description: "CPU usage on instance {{ $labels.instance }} has exceeded 90%, with the current usage at {{ $value }}%."
+
+      - alert: HighMemoryUsage
+        expr: (node_filesystem_size_bytes - node_filesystem_free_bytes) / node_filesystem_size_bytes * 100 >= 85
+        for: 5m
+        labels:
+          service: Memory
+          severity: critical
+        annotations:
+          summary: "High memory usage on {{ $labels.instance }}"
+          description: "Memory usage on instance {{ $labels.instance }} is above 85%, with the current usage at {{ $value }}%."
+
+      - alert: HighDiskIOWait
+        expr: rate(node_disk_io_time_seconds_total[5m]) * 100 > 90
+        for: 5m
+        labels:
+          service: Disk
+          severity: critical
+        annotations:
+          summary: "High disk I/O wait on {{ $labels.instance }}"
+          description: "Disk I/O wait on instance {{ $labels.instance }} is above 90%, with the current rate at {{ $value }}%."
+
+      - alert: HighNetworkBandwidthUtilization
+        expr: (rate(node_network_transmit_bytes_total[5m]) + rate(node_network_receive_bytes_total[5m])) / (node_network_speed_bytes * 1e6) * 100 > 90
+        for: 5m
+        labels:
+          service: Network
+          severity: critical
+        annotations:
+          summary: "High network bandwidth utilization on {{ $labels.instance }}"
+          description: "Network bandwidth utilization on instance {{ $labels.instance }} has exceeded 90%, with the current rate at {{ $value }}%."
+
+      - alert: NetworkCongestion
+        expr: rate(node_network_receive_bytes_total[5m]) > 1e8
+        for: 5m
+        labels:
+          service: Network
+          severity: critical
+        annotations:
+          summary: "Network Congestion"
+          description: "Network congestion detected on instance {{ $labels.instance }} with high traffic, current rate: {{ $value }} bytes/sec."
+
+      - alert: LargeFileDownloadDetected
+        expr: sum(rate(node_network_transmit_bytes_total[5m])) by (instance) > 1747627
+        for: 0m
+        labels:
+          service: Network
+          severity: critical
+        annotations:
+          summary: "Large File Download Detected {{ $labels.instance }}"
+          description: "A large file download (over 1GB) is in progress on instance {{ $labels.instance }}. Total bytes transmitted: {{ $value }}."
+
+  - name: critical_alerts
+    rules:
+      - alert: TooManyOpenFileDescriptors
+        expr: '100 * (process_open_fds / process_max_fds) > 95'
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          description: "Instance {{ $labels.instance }} is using {{ $value }}% of the available file descriptors. This could lead to exhaustion."
+          summary: Too many open file descriptors
+
+      - alert: FdExhaustionClose
+        expr: 'predict_linear(instance:fd_utilization[10m], 3600) > 1'
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          description: "Instance {{ $labels.instance }} is predicted to run out of file descriptors soon, based on current usage trends."
+          summary: File descriptors soon exhausted
+
+      - alert: HostRaidArrayGotInactive
+        expr: '(node_md_state{state="inactive"} > 0) * on(instance) group_left (nodename) node_uname_info{nodename=~".+"}'
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Host RAID array got inactive (instance {{ $labels.instance }})"
+          description: "The RAID array on instance {{ $labels.instance }} is inactive. Device {{ $labels.device }} is in a degraded state, requiring attention."
+
+      - alert: HostRaidDiskFailure
+        expr: '(node_md_disks{state="failed"} > 0) * on(instance) group_left (nodename) node_uname_info{nodename=~".+"}'
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Host RAID disk failure (instance {{ $labels.instance }})"
+          description: "A disk failure has occurred in the RAID array on instance {{ $labels.instance }}. Disk {{ $labels.md_device }} needs replacement or repair."
