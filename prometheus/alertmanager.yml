@@ -1,0 +1,88 @@
+rcmsans@logs-server:~$ sudo cat /etc/alertmanager/alertmanager.yml
+---
+global:
+  resolve_timeout: 30s
+
+templates:
+  -  /etc/alertmanager/slack-template.tmpl
+
+route:
+  group_by: ['alertname']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 1h
+  receiver: rcms-org-info
+  routes:
+    - match:
+        severity: critical
+      receiver: webhook_receiver # rcms-org-critical
+    - match:
+        severity: warning
+      receiver: webhook_receiver # rcms-org-warning
+    - match:
+        severity: info
+      receiver: webhook_receiver # rcms-org-info
+
+receivers:
+  - name: webhook_receiver
+    webhook_configs:
+      - url: 'http://192.168.1.181:8100/alerts'
+        send_resolved: false
+  - name: rcms-org-critical
+    slack_configs:
+      - api_url: 'https://hooks.slack.com/services/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'
+        channel: '#rcms-org-critical'
+        icon_emoji: ':rotating_light:'
+        title: '{{ .Status | toUpper }}{{ if eq .Status "firing" }} - {{ .Alerts.Firing | len }}{{ end }} | PROMETHEUS CRITICAL ALERTS'
+        text: >-
+          {{ range .Alerts }}
+            *Alert:* {{ .Annotations.summary }}
+            *State:* `{{ .Labels.severity }}`
+            *Description:* {{ .Annotations.description }}
+            *Graph:* <{{ .GeneratorURL }}|:chart_with_upwards_trend:>
+            *Details:*
+            {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+            {{ end }}
+          {{ end }}
+        send_resolved: true
+  - name: rcms-org-warning
+    slack_configs:
+      - api_url: 'https://hooks.slack.com/services/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'
+        channel: '#rcms-org-warning'
+        title: '{{ .Status | toUpper }}{{ if eq .Status "firing" }} - {{ .Alerts.Firing | len }}{{ end }} | PROMETHEUS WARNING ALERTS'
+        icon_emoji: ':warning:'
+        text: >-
+          {{ range .Alerts }}
+            *Alert:* {{ .Annotations.summary }}
+            *State:* `{{ .Labels.severity }}`
+            *Description:* {{ .Annotations.description }}
+            *Graph:* <{{ .GeneratorURL }}|:chart_with_upwards_trend:>
+            *Details:*
+            {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+            {{ end }}
+          {{ end }}
+        send_resolved: true
+  - name: rcms-org-info
+    slack_configs:
+      - api_url: 'https://hooks.slack.com/services/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'
+        channel: '#rcms-org-info'
+        icon_emoji: ':information_source:'
+        title: '{{ .Status | toUpper }}{{ if eq .Status "firing" }} - {{ .Alerts.Firing | len }}{{ end }} | PROMETHEUS INFO ALERTS'
+        text: >-
+          {{ range .Alerts }}
+            *Alert:* {{ .Annotations.summary }}
+            *State:* `{{ .Labels.severity }}`
+            *Description:* {{ .Annotations.description }}
+            *Graph:* <{{ .GeneratorURL }}|:chart_with_upwards_trend:>
+            *Details:*
+            {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+            {{ end }}
+          {{ end }}
+        send_resolved: true
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname']
