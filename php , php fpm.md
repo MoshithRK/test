@@ -61,22 +61,3 @@ Restart PHP-FPM after making changes:
 sudo systemctl restart php8.1-fpm
 ```
 
-## Step 6: Test PHP
-Create a test file:
-```bash
-echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php
-```
-Access it in a browser:
-```
-http://your_server_ip/info.php
-```
-
-## Conclusion
-You have successfully installed PHP and PHP-FPM on Ubuntu. If you face any issues, check logs:
-```bash
-sudo journalctl -u php8.1-fpm --no-pager
-```
-
-Happy coding! 🚀
-
-
