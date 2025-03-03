@@ -1,66 +1,82 @@
-To install PHP and PHP-FPM on Ubuntu, follow these steps:
+# PHP and PHP-FPM Installation on Ubuntu
 
-1. **Update the package list**  
-   ```bash
-   sudo apt update && sudo apt upgrade -y
-   ```
+## Overview
+This guide provides steps to install and configure PHP and PHP-FPM on an Ubuntu system.
 
-2. **Install PHP and PHP-FPM**  
-   ```bash
-   sudo apt install php php-fpm -y
-   ```
+## Prerequisites
+- A server running Ubuntu
+- User with sudo privileges
 
-   If you need a specific version, like PHP 8.1, use:  
-   ```bash
-   sudo apt install php8.1 php8.1-fpm -y
-   ```
+## Step 1: Update System Packages
+Before installing, update the package list:
+```bash
+sudo apt update && sudo apt upgrade -y
+```
 
-3. **Verify installation**  
-   Check PHP version:  
-   ```bash
-   php -v
-   ```
-   Check PHP-FPM status:  
-   ```bash
-   systemctl status php-fpm
-   ```
-   For a specific version:  
-   ```bash
-   systemctl status php8.1-fpm
-   ```
+## Step 2: Install PHP and PHP-FPM
+To install the default PHP version:
+```bash
+sudo apt install php php-fpm -y
+```
+For a specific version like PHP 8.1:
+```bash
+sudo apt install php8.1 php8.1-fpm -y
+```
 
-4. **Enable PHP-FPM to start on boot**  
-   ```bash
-   sudo systemctl enable php-fpm
-   ```
-   For PHP 8.1:  
-   ```bash
-   sudo systemctl enable php8.1-fpm
-   ```
+## Step 3: Verify Installation
+Check PHP version:
+```bash
+php -v
+```
+Check PHP-FPM service status:
+```bash
+systemctl status php-fpm
+```
+For a specific version:
+```bash
+systemctl status php8.1-fpm
+```
 
-5. **Configuration files location**  
-   - PHP CLI: `/etc/php/8.1/cli/php.ini`  
-   - PHP-FPM: `/etc/php/8.1/fpm/php.ini`  
-   - PHP-FPM pool: `/etc/php/8.1/fpm/pool.d/www.conf`
+## Step 4: Enable PHP-FPM to Start on Boot
+```bash
+sudo systemctl enable php-fpm
+```
+For PHP 8.1:
+```bash
+sudo systemctl enable php8.1-fpm
+```
 
-   To edit:  
-   ```bash
-   sudo nano /etc/php/8.1/fpm/php.ini
-   ```
+## Step 5: Configuration Files
+PHP and PHP-FPM configuration files are located at:
+- PHP CLI: `/etc/php/8.1/cli/php.ini`
+- PHP-FPM: `/etc/php/8.1/fpm/php.ini`
+- PHP-FPM pool settings: `/etc/php/8.1/fpm/pool.d/www.conf`
 
-6. **Restart PHP-FPM after changes**  
-   ```bash
-   sudo systemctl restart php8.1-fpm
-   ```
+To edit configurations:
+```bash
+sudo nano /etc/php/8.1/fpm/php.ini
+```
+Restart PHP-FPM after making changes:
+```bash
+sudo systemctl restart php8.1-fpm
+```
 
-7. **Test PHP installation**  
-   Create a test file:  
-   ```bash
-   echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php
-   ```
-   Access it in a browser:  
-   ```
-   http://your_server_ip/info.php
-   ```
+## Step 6: Test PHP
+Create a test file:
+```bash
+echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php
+```
+Access it in a browser:
+```
+http://your_server_ip/info.php
+```
 
-This ensures PHP and PHP-FPM are installed and running properly. 🚀
+## Conclusion
+You have successfully installed PHP and PHP-FPM on Ubuntu. If you face any issues, check logs:
+```bash
+sudo journalctl -u php8.1-fpm --no-pager
+```
+
+Happy coding! 🚀
+
+
