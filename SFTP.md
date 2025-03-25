@@ -1,7 +1,7 @@
 
 ---
 
-# **🚀 Complete Setup for SFTP with Audit Logging to `/var/log/sftp.log`**
+# **🚀 Complete Setup for SFTP with Auditd & Logging to `/var/log/sftp.log`**
 
 ## **🔹 Step 1: Install Required Packages**
 ```bash
