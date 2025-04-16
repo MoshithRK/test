@@ -25,6 +25,15 @@ mysqldump -u root -p mydatabase > /tmp/mydatabase_dump.sql
 - `mydatabase`: The name of the database you want to back up.
 - `> /tmp/mydatabase_dump.sql`: Specifies the file location where the dump will be stored.
 
+
+To back up all databases, use the `mysqldump` command with the `--all-databases` option:
+
+```bash
+mysqldump -u root -p --all-databases > /tmp/alldb_dump.sql
+```
+
+- `--all-databases`: Dumps all databases.
+- `> /tmp/alldb_dump.sql`: Specifies the location to store the dump.
 ---
 
 ### **2. Compress the Dump File**
