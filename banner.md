@@ -1,4 +1,3 @@
----
 
 # ✅ Login Banner and MOTD Customization Guide for Ubuntu EC2
 
