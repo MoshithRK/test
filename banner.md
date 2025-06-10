@@ -178,4 +178,3 @@ sudo systemctl restart landscape-client
 
 ---
 
-Let me know if you want this as a shell script or want to customize the banner further!
