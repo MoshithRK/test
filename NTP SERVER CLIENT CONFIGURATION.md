@@ -523,5 +523,3 @@ and restrict UDP 123 to internal IPs via firewall.
 ✅ Time drift remains within microseconds across the network.
 
 ---
-
-Would you like me to export this as a **ready-to-share `.docx` (Word)** or **`.md` (Markdown)** file for your internal documentation system (with formatting, tables, and code preserved)?
