@@ -154,7 +154,6 @@ chmod +x /home/<your-username>/db-tunnel/start-db-tunnel.sh
 ls /home/<your-username>/.ssh/dev_key
 ```
 
-If not found → contact admin
 
 Fix permission:
 
