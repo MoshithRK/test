@@ -28,7 +28,7 @@ Replace:
 Example:
 
 ```bash
-john
+moshith
 ```
 
 ---
@@ -68,7 +68,7 @@ mkdir -p /home/<your-username>/db-tunnel
 Example:
 
 ```bash
-mkdir -p /home/john/db-tunnel
+mkdir -p /home/moshith/db-tunnel
 ```
 
 ---
@@ -86,7 +86,7 @@ Paste this:
 
 SSH_USER="dev-user"   # 🔴 CHANGE THIS
 SSH_HOST="dev-bastion.radiantcms.in"
-KEY_PATH="/home/<your-username>/.ssh/dev_key"
+KEY_PATH="/home/<your-username>/.ssh/dev_key" # 🔴 CHANGE THIS
 LOCAL_PORT=3307
 REMOTE_HOST="10.25.2.11"
 REMOTE_PORT=3306
@@ -127,7 +127,7 @@ KEY_PATH="/home/<your-username>/.ssh/dev_key"
 Example:
 
 ```bash
-KEY_PATH="/home/john/.ssh/dev_key"
+KEY_PATH="/home/moshith/.ssh/dev_key"
 ```
 
 ---
@@ -178,8 +178,8 @@ Description=SSH DB Tunnel Service
 After=network.target
 
 [Service]
-User=<your-username>
-ExecStart=/home/<your-username>/db-tunnel/start-db-tunnel.sh
+User=<your-username> # 🔴 CHANGE THIS
+ExecStart=/home/<your-username>/db-tunnel/start-db-tunnel.sh # 🔴 CHANGE THIS
 Restart=always
 RestartSec=5
 
@@ -194,8 +194,8 @@ WantedBy=multi-user.target
 Example:
 
 ```ini
-User=john
-ExecStart=/home/john/db-tunnel/start-db-tunnel.sh
+User=moshith
+ExecStart=/home/moshith/db-tunnel/start-db-tunnel.sh
 ```
 
 ---
@@ -304,10 +304,3 @@ Before running, confirm:
 
 ---
 
-If you want next improvements, I can help you:
-
-* 🔁 Add multiple DB tunnels
-* 🔐 Add logging
-* ⚡ One-command setup script for team
-
-Just tell me 👍
